@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public UnityAction<int> OnScoreUpdated;
     public UnityAction<int> OnMovesUpdated;
     public UnityAction OnGameOver;
+    public UnityAction OnGameStarted;
 
     private void Awake()
     {
@@ -31,30 +32,32 @@ public class GameManager : MonoBehaviour
         InitializeGame();
     }
 
-    // Método para inicializar o reiniciar el estado del juego.
+    // Method to initialize or reset the game state.
     private void InitializeGame()
     {
         Score = 0;
         Moves = startingMoves;
 
-        // Notificamos a los suscriptores (la UI) sobre los valores iniciales.
+        // Notify subscribers about the initial values.
         OnScoreUpdated?.Invoke(Score);
         OnMovesUpdated?.Invoke(Moves);
+        OnGameStarted?.Invoke();
     }
 
-    public void MakeMove()
+    public void MakeMove(int blocksCollected)
     {
-        // Evitamos que se puedan hacer movimientos si el juego ya terminó.
+        // Prevent moves if the game is already over.
         if (Moves <= 0) return;
 
         Moves--;
-        Score += 10;
 
-        // Notificamos los cambios.
-        OnMovesUpdated?.Invoke(Moves);
+        int scoreGained = blocksCollected;
+        Score += scoreGained;
+
         OnScoreUpdated?.Invoke(Score);
+        OnMovesUpdated?.Invoke(Moves);
 
-        // Comprobamos la condición de fin de juego.
+        // Check for game over condition.
         if (Moves <= 0)
         {
             OnGameOver?.Invoke();

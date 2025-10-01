@@ -13,17 +13,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameplayUI;
 
     [Header("UI Buttons")]
-    [SerializeField] private Button makeMoveButton;
     [SerializeField] private Button replayButton;
 
 
     private void Awake()
     {
-        if (makeMoveButton != null)
-        {
-            makeMoveButton.onClick.AddListener(() => GameManager.Instance.MakeMove());
-        }
-
         if (replayButton != null)
         {
             replayButton.onClick.AddListener(() => GameManager.Instance.Replay());
@@ -44,10 +38,6 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.OnMovesUpdated -= UpdateMovesText;
         GameManager.Instance.OnGameOver -= ShowGameOverScreen;
 
-        if (makeMoveButton != null)
-        {
-            makeMoveButton.onClick.RemoveAllListeners();
-        }
         if (replayButton != null)
         {
             replayButton.onClick.RemoveAllListeners();
